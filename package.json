@@ -1,6 +1,6 @@
 {
   "name": "jsdk-utils",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "510344272@qq.com",
   "license": "MIT",
   "description": "javascript sdk utils",
@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "typescript": "^2.6.2",
-    "cls": "0.0.3"
+    "jsdk-lang": "0.0.4"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
