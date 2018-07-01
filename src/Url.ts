@@ -1,4 +1,4 @@
-import {IStringEscape} from "jsdk-lang";
+import {IStringEscape} from 'jsdk-lang';
 
 export default class Url {
 
@@ -51,7 +51,7 @@ export default class Url {
     file: string;
 
     /**
-     * 锚点值
+     * 锚点值,如:http://abc.com:8080/dir/index.html?id=255&m=hello#top,获取的是top
      * @property hash
      * @type {String}
      * @default null
@@ -67,12 +67,12 @@ export default class Url {
     path: string;
 
     /**
-     * 锚点值,如:http://abc.com:8080/dir/index.html?id=255&m=hello#top,获取的是#top
+     * 如:http://abc.com:8080/dir/index.html?id=255&m=hello#top,获取的是['dir', 'index.html']
      * @property segments
-     * @type {String}
+     * @type {String[]}
      * @default null
      */
-    segments: string;
+    segments: string[];
 
     /***
      * @param url {String} url 目标URL,如果不传递url,默认以当前页面的地址作为URL解析
@@ -114,7 +114,7 @@ export default class Url {
      * @method queryToJson
      * @return {Object} - 解析为结果对象
      */
-    queryToJson(): object {
+    paramToJson(): object {
         let reg_url = /^[^\?]+\?([\w\W]+)$/,
             reg_para = /([^&=]+)=([\w\W]*?)(&|$|#)/g,
             arr_url = reg_url.exec(this.url),

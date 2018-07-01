@@ -3,14 +3,14 @@
  * @class RegExp
  * @static
  */
-export default class RegExp {
+export default class RegExps {
 
-    /**
+    /**s
      * 百分比判定正则
      * @property PERCENT
      * @type{RegExp}
      */
-    static PERCENT: RegExp = /\d+\.?\%/;
+    static PERCENT:RegExp = /\d+\.?\%/;
 
     /**
      * 邮箱判定正则
@@ -73,7 +73,7 @@ export default class RegExp {
      * @return true/false
      */
     static isPercent(value: string): boolean {
-        return PERCENT.test(value);
+        return this.PERCENT.test(value);
     };
 
     /**
@@ -84,7 +84,7 @@ export default class RegExp {
      * @return true/false
      */
     static isEmail(value: string): boolean {
-        return EMAIL.test(value);
+        return this.EMAIL.test(value);
     };
 
     /**
@@ -95,7 +95,7 @@ export default class RegExp {
      * @return true/false
      */
     static isUrl(value: string): boolean {
-        return URL.test(value);
+        return this.URL.test(value);
     };
 
     /**
@@ -106,7 +106,7 @@ export default class RegExp {
      * @return true/false
      */
     static isIP(value: string): boolean {
-        return IP.test(value);
+        return this.IP.test(value);
     };
 
     /**
@@ -117,7 +117,7 @@ export default class RegExp {
      * @return true/false
      */
     static isMobile(value: string): boolean {
-        return MOBILE.test(value);
+        return this.MOBILE.test(value);
     };
 
     /**
@@ -128,7 +128,7 @@ export default class RegExp {
      * @return true/false
      */
     static isPhone(value: string): boolean {
-        return PHONE.test(value);
+        return this.PHONE.test(value);
     };
 
     /**
@@ -139,7 +139,7 @@ export default class RegExp {
      * @return true/false
      */
     static isRgbColor(value: string): boolean {
-        return RgbColor.test(value);
+        return this.RgbColor.test(value);
     };
 
     /**
@@ -150,6 +150,6 @@ export default class RegExp {
      * @return true/false
      */
     static isHexColor(value: string): boolean {
-        return HexColor.test(value);
+        return this.HexColor.test(value);
     };
 }

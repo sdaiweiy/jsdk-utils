@@ -3,7 +3,7 @@ const _Chars: string[] = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqr
 export default class IdGen {
 
     //全局唯一的ID
-    private static id: number = 1;
+    private static _id: number = 1;
 
     /**
      * 生成UUID
@@ -38,6 +38,6 @@ export default class IdGen {
      * @return {Number}
      */
     static id(): string {
-        return this.id++;
+        return this._id++ + '';
     }
 }
