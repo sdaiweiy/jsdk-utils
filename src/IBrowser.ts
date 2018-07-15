@@ -38,7 +38,7 @@ let _Information = function () {
 /**
  * 浏览器信息工具类
  */
-export default class Browser {
+export default class IBrowser {
 
     static isIE: boolean = _Information.ie;
 
@@ -58,7 +58,7 @@ export default class Browser {
      * 判断当前浏览器是否是是小于等于ie7浏览器,包括IE8的判定
      * @method ieLessThanIE7
      */
-    static ieLessThanIE7: boolean = Browser.isIE6 || Browser.isIE7;
+    static ieLessThanIE7: boolean = IBrowser.isIE6 || IBrowser.isIE7;
 
     /**
      * 判断当前浏览器是否是ie8浏览器
@@ -70,7 +70,7 @@ export default class Browser {
      * 判断当前浏览器是否是是小于等于ie8浏览器,包括IE8的判定
      * @method ieLessThanIE8
      */
-    static ieLessThanIE78: boolean = Browser.isIE6 || Browser.isIE7 || Browser.isIE8;
+    static ieLessThanIE78: boolean = IBrowser.isIE6 || IBrowser.isIE7 || IBrowser.isIE8;
 
     /**
      * 判断是否是opera浏览器

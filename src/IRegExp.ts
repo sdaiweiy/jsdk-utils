@@ -3,7 +3,7 @@
  * @class RegExp
  * @static
  */
-export default class RegExps {
+export default class IRegExp {
 
     /**s
      * 百分比判定正则

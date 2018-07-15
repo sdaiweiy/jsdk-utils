@@ -1,9 +1,9 @@
-const reg: RegExp = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
-
 /*
  * 颜色转换工具类
  */
-export default class Color {
+export default class IColor {
+
+    private static readonly COLOR_REG: RegExp = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
 
     /**
      * RGB颜色转换为16进制
@@ -25,7 +25,7 @@ export default class Color {
                 strHex = color;
             }
             return strHex;
-        } else if (reg.test(color)) {
+        } else if (this.COLOR_REG.test(color)) {
             let aNum = color.replace(/#/, "").split("");
             if (aNum.length === 6) {
                 return color;
@@ -48,7 +48,7 @@ export default class Color {
      */
     public static toRgb(color: string): string {
         let sColor = color.toLowerCase();
-        if (sColor && reg.test(sColor)) {
+        if (sColor && this.COLOR_REG.test(sColor)) {
             if (sColor.length === 4) {
                 let sColorNew = "#";
                 for (let i = 1; i < 4; i += 1) {

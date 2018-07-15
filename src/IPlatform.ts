@@ -1,8 +1,8 @@
 /**
  * 判断平台类型和特性的属性
- * @class Platform
+ * @class IPlatform
  */
-export default class Platform {
+export default class IPlatform {
 
     /**
      * 判断是否为android平台

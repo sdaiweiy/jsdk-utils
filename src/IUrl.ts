@@ -1,6 +1,6 @@
-import {IStringEscape} from 'jsdk-lang';
+import {IObject, IString, INumber, IBoolean, IStringEscape} from 'jsdk-lang';
 
-export default class Url {
+export default class IUrl {
 
     /**
      * 给定的访问地址,如果不提供默认为location.href的值
@@ -111,13 +111,13 @@ export default class Url {
 
     /**
      * 解析目标URL中的参数成json对象
-     * @method queryToJson
+     * @method paramToObject
      * @return {Object} - 解析为结果对象
      */
-    paramToJson(): object {
+    public static paramToObject(url: string): object {
         let reg_url = /^[^\?]+\?([\w\W]+)$/,
             reg_para = /([^&=]+)=([\w\W]*?)(&|$|#)/g,
-            arr_url = reg_url.exec(this.url),
+            arr_url = reg_url.exec(url),
             ret = {};
 
         if (arr_url && arr_url[1]) {
@@ -127,5 +127,31 @@ export default class Url {
             }
         }
         return ret;
+    }
+
+    /***
+     * 将js对象转换为url参数
+     * @param {Object} object 目标对象
+     * @param {Boolean} encode 是否需要编码,默认值为false
+     * @returns {String} 转换后的参数
+     * @example
+     * let obj = {"name": 'tom', "class": {"className": 'class1'}, "classMates": [{"name": 'lily'}]};
+     * IUrl.objectToParam(obj);   =>  name=tom&class.className=class1&classMates[0].name=lily
+     */
+    public static objectToParam(object: object, encode: boolean = false): string {
+        return this._objectToParams(object, encode);
+    }
+
+    private static _objectToParams(object: object, encode: boolean, key?: string): string {
+        let paramStr = "";
+        if (IString.isString(object) || INumber.isNumber(object) || IBoolean.isBoolean(object)) {
+            paramStr += "&" + key + "=" + (encode ? encodeURIComponent(<any>object) : object);
+        } else {
+            IObject.each(object, function (i) {
+                let k = key == null ? i : key + (object instanceof Array ? "[" + i + "]" : "." + i);
+                paramStr += '&' + IUrl._objectToParams(this, encode, k);
+            });
+        }
+        return paramStr.substr(1);
     }
 }

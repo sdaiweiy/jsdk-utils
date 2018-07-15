@@ -4,14 +4,14 @@
  * @property domain cookie域名
  * @property secure cookie是否安全传输
  */
-export interface CookieConfig {
+export interface ICookieConfig {
     path?: string,
     expires?: number,
     domain?: string,
     secure?: boolean
 }
 
-export default class Cookie {
+export default class ICookie {
 
     /**
      * 读取key对应的cookie的值
@@ -70,9 +70,9 @@ export default class Cookie {
      * @static
      * @param {String} key key
      * @param {String} value value
-     * @param {CookieConfig} options 可选参数
+     * @param {ICookieConfig} options 可选参数
      */
-    static set(key: string, value: string, options: CookieConfig = {}): boolean {
+    static set(key: string, value: string, options: ICookieConfig = {}): boolean {
         if (!key || /^(?:expires|max\-age|path|domain|secure)$/i.test(key)) {
             return false;
         }
