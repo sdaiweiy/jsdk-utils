@@ -97,12 +97,13 @@ export default class IUrl {
     /**
      * 根据参数名从目标URL中获取参数值
      * @method getQueryString
+     * @param {String} url 目标url
      * @param {String} key 要获取的参数名
      * @return {String|null} - 获取的参数值，其中URI编码后的字符不会被解码，获取不到时返回null
      */
-    getQueryString(key: string): string | null {
+    static getQueryString(url: string, key: string): string | null {
         let reg = new RegExp("(^|&|\\?|#)" + IStringEscape.escapeReg(key) + "=([^&#]*)(&|\x24|#)", "");
-        let match = this.url.match(reg);
+        let match = url.match(reg);
         if (match) {
             return match[2];
         }
@@ -114,7 +115,7 @@ export default class IUrl {
      * @method paramToObject
      * @return {Object} - 解析为结果对象
      */
-    public static paramToObject(url: string): object {
+    static paramToObject(url: string): object {
         let reg_url = /^[^\?]+\?([\w\W]+)$/,
             reg_para = /([^&=]+)=([\w\W]*?)(&|$|#)/g,
             arr_url = reg_url.exec(url),
@@ -138,7 +139,7 @@ export default class IUrl {
      * let obj = {"name": 'tom', "class": {"className": 'class1'}, "classMates": [{"name": 'lily'}]};
      * IUrl.objectToParam(obj);   =>  name=tom&class.className=class1&classMates[0].name=lily
      */
-    public static objectToParam(object: object, encode: boolean = false): string {
+    static objectToParam(object: object, encode: boolean = false): string {
         return this._objectToParams(object, encode);
     }
 
@@ -147,9 +148,9 @@ export default class IUrl {
         if (IString.isString(object) || INumber.isNumber(object) || IBoolean.isBoolean(object)) {
             paramStr += "&" + key + "=" + (encode ? encodeURIComponent(<any>object) : object);
         } else {
-            IObject.each(object, function (i) {
+            IObject.each(object, function (i, o) {
                 let k = key == null ? i : key + (object instanceof Array ? "[" + i + "]" : "." + i);
-                paramStr += '&' + IUrl._objectToParams(this, encode, k);
+                paramStr += '&' + IUrl._objectToParams(o, encode, k);
             });
         }
         return paramStr.substr(1);

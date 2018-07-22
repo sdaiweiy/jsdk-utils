@@ -1,7 +1,7 @@
 export default class IIdGen {
 
     //全局唯一的ID
-    private static id: number = 1;
+    private static _id: number = 1;
 
     private static readonly CHARS: string[] = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
 
@@ -38,6 +38,6 @@ export default class IIdGen {
      * @return {Number}
      */
     public static id(): string {
-        return this.id++ + '';
+        return this._id++ + '';
     }
 }

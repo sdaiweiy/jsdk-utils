@@ -2,7 +2,6 @@ import IUrl from "../src/IUrl";
 import {expect} from "chai";
 import "mocha";
 
-
 describe("objectToParam function", () => {
     it("basic", () => {
         let obj = {
