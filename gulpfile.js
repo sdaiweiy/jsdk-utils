@@ -2,6 +2,11 @@ let gulp = require("gulp"),
     tsc = require("gulp-typescript"),
     typedoc = require("gulp-typedoc"),
     rollup = require('rollup'),
+    uglify = require("gulp-uglify"),
+    rename = require('gulp-rename'),
+    header = require("gulp-header"),
+    runSequence = require("run-sequence"),
+    resolve = require('rollup-plugin-node-resolve'),
     rollupTypescript = require('rollup-plugin-typescript');
 
 
@@ -12,7 +17,7 @@ gulp.task("build-source", function () {
 });
 
 //打包es6版本的代码,单文件供浏览器直接访问
-gulp.task("bundle-source-es5", function () {
+gulp.task("bundled-source-es5", function () {
     return rollup.rollup({
         input: './src/index.ts',
         plugins: [
@@ -23,20 +28,25 @@ gulp.task("bundle-source-es5", function () {
                     }
                 },
                 typescript: require('typescript')
+            }),
+            resolve({
+                jsnext: true,
+                main: true,
+                browser: true
             })
         ]
     }).then(bundle => {
         return bundle.write({
-            file: './bundle/es5/jsdk.utils.js',
+            file: './bundled/jsdk.utils.es5.js',
             format: 'iife',
-            name: 'Jsdk.Lang',
+            name: 'Jsdk.Utils',
             sourcemap: true
         });
     });
 });
 
 //打包es3版本的代码,单文件供浏览器直接访问
-gulp.task("bundle-source-es3", function () {
+gulp.task("bundled-source-es3", function () {
     return rollup.rollup({
         input: './src/index.ts',
         plugins: [
@@ -51,12 +61,42 @@ gulp.task("bundle-source-es3", function () {
         ]
     }).then(bundle => {
         return bundle.write({
-            file: './bundle/es3/jsdk.utils.js',
+            file: './bundled/jsdk.utils.es3.js',
             format: 'iife',
-            name: 'Jsdk.Lang',
+            name: 'Jsdk.Utils',
             sourcemap: true
         });
     });
+});
+
+gulp.task("compress-es5", function () {
+    return gulp.src("./bundled/jsdk.utils.es5.js")
+        .pipe(uglify({}))
+        .pipe(rename({suffix: '.min'}))
+        .pipe(gulp.dest("./bundled"))
+});
+
+gulp.task("compress-es3", function () {
+    return gulp.src("./bundled/jsdk.utils.es3.js")
+        .pipe(uglify({ie8: true}))
+        .pipe(rename({suffix: '.min'}))
+        .pipe(gulp.dest("./bundled"))
+});
+
+gulp.task("header", function () {
+    let pkg = require(__dirname + "/package.json");
+
+    let banner = ["/**",
+        " * <%= pkg.name %> v.<%= pkg.version %> - <%= pkg.description %>",
+        " * Copyright (c) 2018 <%= pkg.author %>",
+        " * <%= pkg.license %>",
+        " * <%= pkg.homepage %>",
+        " */",
+        ""].join("\n");
+
+    return gulp.src(["./bundled/jsdk.utils.es3.js", "./bundled/jsdk.utils.es3.min.js", "./bundled/jsdk.utils.es5.js", "./bundled/jsdk.utils.es5.min.js"])
+        .pipe(header(banner, {pkg: pkg}))
+        .pipe(gulp.dest("./bundled"));
 });
 
 gulp.task("document", function () {
@@ -69,4 +109,30 @@ gulp.task("document", function () {
             name: "jsdk-utils-api",
             ignoreCompilerErrors: true
         }));
+});
+
+gulp.task('build-es6', function (cb) {
+    runSequence(
+        //"lint",
+        "build-source",
+        //["run-unit-test"],
+        cb);
+});
+
+gulp.task('build-es5', function (cb) {
+    runSequence(
+        "build-es6",
+        "bundled-source-es5",
+        "compress-es5",
+        "header",
+        cb);
+});
+
+gulp.task('build-es3', function (cb) {
+    runSequence(
+        "build-es6",
+        "bundled-source-es3",
+        "compress-es3",
+        "header",
+        cb);
 });

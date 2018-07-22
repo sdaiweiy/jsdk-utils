@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
     /*    "target": "es6",*/
+    "baseUrl": ".",
+    "paths": {
+      "jsdk-lang": ["node_modules/jsdk-lang/dist/index"]
+    },
     "noImplicitAny": false,
     "removeComments": true,
     "noUnusedLocals": true,

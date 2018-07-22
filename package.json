@@ -1,9 +1,13 @@
 {
   "name": "jsdk-utils",
   "version": "0.0.2",
-  "author": "510344272@qq.com",
-  "license": "MIT",
   "description": "javascript sdk utils",
+  "author": {
+    "name": "wdai",
+    "email": "510344272@qq.com"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/sdaiweiy/jsdk-utils",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "keywords": [
@@ -27,15 +31,17 @@
   "devDependencies": {
     "@types/chai": "^4.1.4",
     "@types/mocha": "^5.2.2",
-    "babel-core": "^6.26.3",
     "chai": "^4.1.2",
     "gulp": "^3.9.1",
     "gulp-header": "^2.0.5",
     "gulp-rename": "^1.3.0",
     "gulp-typedoc": "^2.2.0",
     "gulp-typescript": "^3.2.3",
+    "gulp-uglify": "^3.0.0",
+    "jsdk-lang": "0.0.7",
     "mocha": "^5.2.0",
     "rollup": "^0.60.1",
+    "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-typescript": "^0.8.1",
     "run-sequence": "^2.2.1",
     "ts-node": "^6.1.1",
