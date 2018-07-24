@@ -1,121 +1,17 @@
-import {IObject, IString, INumber, IBoolean, IStringEscape} from 'jsdk-lang';
+import {IObject, IString, INumber, IBoolean, IArray, IStringEscape} from 'jsdk-lang';
 
 export default class IUrl {
 
-    /**
-     * 给定的访问地址,如果不提供默认为location.href的值
-     * @property url
-     * @type {String}
-     * @default location.href
-     */
-    url: string;
-
-    /**
-     * 协议http/https等
-     * @property protocol
-     * @type {String}
-     * @default null
-     */
-    protocol: string;
-
-    /**
-     * 主机(域名或IP)
-     * @property host
-     * @type {String}
-     * @default null
-     */
-    host: string;
-
-    /**
-     * 端口号
-     * @property port
-     * @type {String}
-     * @default null
-     */
-    port: string;
-
-    /**
-     * 查询条件如:http://abc.com:8080/dir/index.html?id=255&m=hello#top,截取的是?id=255&m=hello
-     * @property query
-     * @type {String}
-     * @default null
-     */
-    query: string;
-
-    /**
-     * 访问的文件如:http://abc.com:8080/dir/index.html?id=255&m=hello#top,获取的是index.html
-     * @property file
-     * @type {String}
-     * @default null
-     */
-    file: string;
-
-    /**
-     * 锚点值,如:http://abc.com:8080/dir/index.html?id=255&m=hello#top,获取的是top
-     * @property hash
-     * @type {String}
-     * @default null
-     */
-    hash: string;
-
-    /**
-     * 访问路径,如:http://abc.com:8080/dir/index.html?id=255&m=hello#top,获取的是/dir/index.html
-     * @property path
-     * @type {String}
-     * @default null
-     */
-    path: string;
-
-    /**
-     * 如:http://abc.com:8080/dir/index.html?id=255&m=hello#top,获取的是['dir', 'index.html']
-     * @property segments
-     * @type {String[]}
-     * @default null
-     */
-    segments: string[];
-
-    /***
-     * @param url {String} url 目标URL,如果不传递url,默认以当前页面的地址作为URL解析
-     * var url = new Dev.Utils.Url("http://abc.com:8080/dir/index.html?id=255&m=hello#top");<br/>
-     * url.port ==> 8080
-     */
-    constructor(url: string = location.href) {
-        let a = document.createElement('a');
-        a.href = url;
-
-        this.url = url;
-        this.protocol = a.protocol.replace(':', '');
-        this.host = a.hostname;
-        this.port = a.port;
-        this.query = a.search;
-        this.file = (a.pathname.match(/\/([^\/?#]+)$/i) || [, ''])[1];
-        this.hash = a.hash.replace('#', '');
-        this.path = a.pathname.replace(/^([^\/])/, '/$1');
-        this.segments = a.pathname.replace(/^\//, '').split('/');
-    }
-
-    /**
-     * 根据参数名从目标URL中获取参数值
-     * @method getQueryString
-     * @param {String} url 目标url
-     * @param {String} key 要获取的参数名
-     * @return {String|null} - 获取的参数值，其中URI编码后的字符不会被解码，获取不到时返回null
-     */
-    static getQueryString(url: string, key: string): string | null {
-        let reg = new RegExp("(^|&|\\?|#)" + IStringEscape.escapeReg(key) + "=([^&#]*)(&|\x24|#)", "");
-        let match = url.match(reg);
-        if (match) {
-            return match[2];
-        }
-        return null;
-    }
+    private static link: HTMLAnchorElement = document.createElement('a');
 
     /**
      * 解析目标URL中的参数成json对象
-     * @method paramToObject
+     * @method deSerialize
+     * @optional
+     * @param {String} url 目标url,默认为浏览器当前的地址
      * @return {Object} - 解析为结果对象
      */
-    static paramToObject(url: string): object {
+    static deSerialize(url: string = location.href): object {
         let reg_url = /^[^\?]+\?([\w\W]+)$/,
             reg_para = /([^&=]+)=([\w\W]*?)(&|$|#)/g,
             arr_url = reg_url.exec(url),
@@ -130,8 +26,122 @@ export default class IUrl {
         return ret;
     }
 
+    /**
+     * 获取访问路径,如:http://abc.com:8080/dir/index.html?id=255&m=hello#top,获取的是index.html
+     * @optional
+     * @param {String} url 目标url,默认为浏览器当前的地址
+     * @return {String}
+     */
+    static getFile(url: string = location.href): string {
+        this.link.href = url;
+        return (this.link.pathname.match(/\/([^\/?#]+)$/i) || [, ''])[1]
+    }
+
+    /**
+     * 锚点值,如:http://abc.com:8080/dir/index.html?id=255&m=hello#top,获取的是top
+     * @optional
+     * @param {String} url 目标url,默认为浏览器当前的地址
+     * @return {String}
+     */
+    static getHash(url: string = location.href): string {
+        this.link.href = url;
+        return this.link.hash.replace('#', '');
+    }
+
+    /**
+     * 获取主机(域名或IP)如:http://abc.com:8080/dir/index.html?id=255&m=hello#top,截取的是abc.com
+     * @optional
+     * @param {String} url 目标url,默认为浏览器当前的地址
+     * @return {String}
+     */
+    static getHost(url: string = location.href): string {
+        this.link.href = url;
+        return this.link.hostname;
+    }
+
+    /**
+     * 查询条件如:http://abc.com:8080/dir/index.html?id=255&m=hello#top,截取的是?id=255&m=hello
+     * @optional
+     * @param {String} url 目标url,默认为浏览器当前的地址
+     * @return {String}
+     */
+    static getQuery(url: string = location.href): string {
+        this.link.href = url;
+        return this.link.search;
+    }
+
+    /**
+     * 获取访问路径,如:http://abc.com:8080/dir/index.html?id=255&m=hello#top,获取的是/dir/index.html
+     * @optional
+     * @param {String} url 目标url,默认为浏览器当前的地址
+     * @return {String}
+     */
+    static getPath(url: string = location.href): string {
+        this.link.href = url;
+        return this.link.pathname.replace(/^([^\/])/, '/$1');
+    }
+
+    /**
+     * 获取端口号
+     * @optional
+     * @param {String} url 目标url,默认为浏览器当前的地址
+     * @return {String}
+     */
+    static getPort(url: string = location.href): string {
+        this.link.href = url;
+        return this.link.port;
+    }
+
+    /**
+     * 获取url的协议,如http/https等
+     * @method getProtocol
+     * @optional
+     * @param {String} url 目标url,默认为浏览器当前的地址
+     * @return {String}
+     */
+    static getProtocol(url: string = location.href): string {
+        this.link.href = url;
+        return this.link.protocol.replace(':', '');
+    }
+
+    /**
+     * 获取访问片段,如:http://abc.com:8080/dir/index.html?id=255&m=hello#top,获取的是['dir', 'index.html']
+     * @optional
+     * @param {String} url 目标url,默认为浏览器当前的地址
+     * @return {String}
+     */
+    static getSegments(url: string = location.href): string[] {
+        this.link.href = url;
+        return this.link.pathname.replace(/^\//, '').split('/');
+    }
+
     /***
-     * 将js对象转换为url参数
+     * 获取当前页面的url信息
+     * @returns {string}
+     */
+    static getUrl(): string {
+        return location.href;
+    }
+
+    /**
+     * 根据参数名从目标URL中获取参数值
+     * @method getParameter
+     * @param {String} key 要获取的参数名
+     * @optional
+     * @param {String} url 目标url,默认为浏览器当前的地址
+     * @return {String|null} - 获取的参数值，其中URI编码后的字符不会被解码，获取不到时返回null
+     */
+    static getParameter(key: string, url: string = location.href): string | null {
+        let reg = new RegExp("(^|&|\\?|#)" + IStringEscape.escapeReg(key) + "=([^&#]*)(&|\x24|#)", "");
+        let match = url.match(reg);
+        if (match) {
+            return match[2];
+        }
+        return null;
+    }
+
+    /***
+     * 将json对象转换为url参数
      * @param {Object} object 目标对象
      * @param {Boolean} encode 是否需要编码,默认值为false
      * @returns {String} 转换后的参数
@@ -139,18 +149,18 @@ export default class IUrl {
      * let obj = {"name": 'tom', "class": {"className": 'class1'}, "classMates": [{"name": 'lily'}]};
      * IUrl.objectToParam(obj);   =>  name=tom&class.className=class1&classMates[0].name=lily
      */
-    static objectToParam(object: object, encode: boolean = false): string {
-        return this._objectToParams(object, encode);
+    static serialize(object: object, encode: boolean = false): string {
+        return this._serialize(object, encode);
     }
 
-    private static _objectToParams(object: object, encode: boolean, key?: string): string {
+    private static _serialize(object: object, encode: boolean, key?: string): string {
         let paramStr = "";
         if (IString.isString(object) || INumber.isNumber(object) || IBoolean.isBoolean(object)) {
             paramStr += "&" + key + "=" + (encode ? encodeURIComponent(<any>object) : object);
         } else {
             IObject.each(object, function (i, o) {
-                let k = key == null ? i : key + (object instanceof Array ? "[" + i + "]" : "." + i);
-                paramStr += '&' + IUrl._objectToParams(o, encode, k);
+                let k = key == null ? i : key + (IArray.isArray(object) ? "[" + i + "]" : "." + i);
+                paramStr += '&' + IUrl._serialize(o, encode, k);
             });
         }
         return paramStr.substr(1);
