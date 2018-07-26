@@ -1,17 +1,17 @@
-import Browser from './IBrowser';
-import Color from './IColor';
-import Cookie from './ICookie';
-import IdGen from './IIdGen';
-import Platform from './IPlatform';
-import RegExp from './IRegExp';
-import Url from './IUrl';
+import IBrowser from './IBrowser';
+import IColor from './IColor';
+import ICookie from './ICookie';
+import IIdGen from './IIdGen';
+import IPlatform from './IPlatform';
+import IRegExp from './IRegExp';
+import IUrl from './IUrl';
 
 export {
-    Browser,
-    Color,
-    Cookie,
-    IdGen,
-    Platform,
-    RegExp,
-    Url
+    IBrowser,
+    IColor,
+    ICookie,
+    IIdGen,
+    IPlatform,
+    IRegExp,
+    IUrl
 }
