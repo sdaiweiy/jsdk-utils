@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "typescript": "^2.6.2",
-    "jsdk-lang": "0.0.4"
+    "jsdk-lang": "0.0.10"
   },
   "devDependencies": {
     "@types/chai": "^4.1.4",
@@ -38,7 +38,6 @@
     "gulp-typedoc": "^2.2.0",
     "gulp-typescript": "^3.2.3",
     "gulp-uglify": "^3.0.0",
-    "jsdk-lang": "0.0.7",
     "mocha": "^5.2.0",
     "rollup": "^0.60.1",
     "rollup-plugin-node-resolve": "^3.3.0",
