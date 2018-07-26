@@ -331,13 +331,13 @@ this.Jsdk = this.Jsdk || {};
         return IUrl;
     }());
 
-    exports.Browser = IBrowser;
-    exports.Color = IColor;
-    exports.Cookie = ICookie;
-    exports.IdGen = IIdGen;
-    exports.Platform = IPlatform;
-    exports.RegExp = IRegExp;
-    exports.Url = IUrl;
+    exports.IBrowser = IBrowser;
+    exports.IColor = IColor;
+    exports.ICookie = ICookie;
+    exports.IIdGen = IIdGen;
+    exports.IPlatform = IPlatform;
+    exports.IRegExp = IRegExp;
+    exports.IUrl = IUrl;
 
     return exports;
 
